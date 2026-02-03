@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
-import { requireAuth } from '@/lib/auth/guards'
-import { prisma } from '@/lib/prisma'
+import { requireAuth } from '../../../../lib/auth/guards'
+import { prisma } from '../../../../lib/prisma'
 
 export const runtime = 'nodejs'
 

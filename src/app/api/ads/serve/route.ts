@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
-import { requireAuth } from '@/lib/auth/guards'
-import { serveAd } from '@/modules/ads/adController'
-import { UserContext } from '@/modules/ads/adTypes'
+import { requireAuth } from '../../../../lib/auth/guards'
+import { serveAd } from '../../../../modules/ads/adController'
+import { UserContext } from '../../../../modules/ads/adTypes'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { authOptions } from '../../../../lib/auth'
 
 export const runtime = 'nodejs'
 

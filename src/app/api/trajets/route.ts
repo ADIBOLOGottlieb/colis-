@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { authOptions } from '../../../lib/auth'
+import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
 import {
   UserRole,
   ActiveMode,
   Permission
 } from '@/types/auth'
-import { requirePermission } from '@/lib/auth/guards'
+import { requirePermission } from '../../../lib/auth/guards'
 
 const trajetSchema = z.object({
   villeDepart: z.string().min(2, 'Ville de départ requise'),
