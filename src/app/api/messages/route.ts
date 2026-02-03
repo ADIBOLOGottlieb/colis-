@@ -10,6 +10,7 @@ import {
   getEffectiveMode,
   hasPermission
 } from '@/types/auth'
+import { createMessage } from '@/modules/messaging/messagingService'
 
 const messageSchema = z.object({
   conversationId: z.string(),
@@ -83,28 +84,11 @@ export async function POST(request: Request) {
       ? conversation.trajet.userId
       : conversation.colis.userId
 
-    // Creer le message
-    const message = await prisma.message.create({
-      data: {
-        content,
-        conversationId,
-        senderId: session.user.id,
-        receiverId,
-      },
-      include: {
-        sender: {
-          select: {
-            id: true,
-            name: true,
-          }
-        }
-      }
-    })
-
-    // Mettre a jour la date de derniere activite de la conversation
-    await prisma.conversation.update({
-      where: { id: conversationId },
-      data: { updatedAt: new Date() }
+    const message = await createMessage({
+      conversationId,
+      senderId: session.user.id,
+      receiverId,
+      content
     })
 
     return NextResponse.json(message, { status: 201 })

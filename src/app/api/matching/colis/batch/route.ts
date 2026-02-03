@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { requirePermission } from '@/lib/auth/guards'
 import { Permission } from '@/types/auth'
-import { findMatchesForColis } from '@/lib/matching/engine'
+import { findMatchesForColis } from '@/modules/matching/matchingService'
 import { prisma } from '@/lib/prisma'
 
 const requestSchema = z.object({

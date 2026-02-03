@@ -16,7 +16,6 @@ import {
   Weight,
   Calendar,
   DollarSign,
-  Edit,
   ArrowRight
 } from 'lucide-react'
 import { format } from 'date-fns'
@@ -52,6 +51,7 @@ interface UserProfile {
   name: string
   email: string
   phone?: string
+  photo?: string
   role: UserRole
   activeMode?: ActiveMode
   createdAt: string
@@ -69,7 +69,17 @@ export default function ProfilPage() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [activeTab, setActiveTab] = useState<'colis' | 'trajets'>('colis')
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    photo: '',
+    newPassword: '',
+    confirmPassword: ''
+  })
 
   const userCanCreateColis = session?.user ? canCreateColis({
     id: session.user.id,
@@ -105,6 +115,18 @@ export default function ProfilPage() {
       if (res.ok) {
         const data = await res.json()
         setProfile(data)
+        const parts = (data?.name || '').split(' ')
+        const firstName = parts.shift() || ''
+        const lastName = parts.join(' ')
+        setForm({
+          firstName,
+          lastName,
+          email: data?.email || '',
+          phone: data?.phone || '',
+          photo: data?.photo || '',
+          newPassword: '',
+          confirmPassword: ''
+        })
       } else {
         setError('Erreur lors du chargement du profil')
       }
@@ -118,11 +140,11 @@ export default function ProfilPage() {
   const getRoleLabel = (role: UserRole) => {
     switch (role) {
       case UserRole.EXPEDITEUR:
-        return 'Expéditeur'
+        return 'Expediteur'
       case UserRole.VOYAGEUR:
         return 'Voyageur'
       case UserRole.LES_DEUX:
-        return 'Expéditeur & Voyageur'
+        return 'Expediteur & Voyageur'
       default:
         return role
     }
@@ -142,11 +164,61 @@ export default function ProfilPage() {
   }
 
   const getActiveModeLabel = (mode?: ActiveMode) => {
-    if (!mode) return 'Non défini'
-    return mode === ActiveMode.EXPEDITEUR ? 'Expéditeur' : 'Voyageur'
+    if (!mode) return 'Non defini'
+    return mode === ActiveMode.EXPEDITEUR ? 'Expediteur' : 'Voyageur'
   }
 
-  // Show loading state while checking session
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setSuccess('')
+
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      setError('Email invalide')
+      return
+    }
+
+    if (form.newPassword || form.confirmPassword) {
+      if (form.newPassword.length < 8) {
+        setError('Le mot de passe doit contenir au moins 8 caracteres')
+        return
+      }
+      if (form.newPassword !== form.confirmPassword) {
+        setError('Les mots de passe ne correspondent pas')
+        return
+      }
+    }
+
+    try {
+      const res = await fetch('/api/user', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          photo: form.photo.trim() || undefined,
+          newPassword: form.newPassword || undefined,
+          confirmPassword: form.confirmPassword || undefined
+        })
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data?.error || 'Erreur lors de la mise a jour')
+      }
+      setSuccess('Profil mis a jour avec succes')
+      await fetchProfile()
+    } catch (err: any) {
+      setError(err.message || 'Une erreur est survenue')
+    }
+  }
+
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -155,12 +227,11 @@ export default function ProfilPage() {
     )
   }
 
-  // Redirect to signin if not authenticated
   if (status === 'unauthenticated') {
     return null
   }
 
-  if (error) {
+  if (error && !profile) {
     return (
       <div className="min-h-screen bg-gray-50 py-8 px-4">
         <div className="max-w-4xl mx-auto">
@@ -182,18 +253,24 @@ export default function ProfilPage() {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
         <AdBanner placement="dashboard" variant="banner" />
-        {/* Profile Header */}
+
         <div className="card">
           <div className="flex flex-col md:flex-row md:items-center gap-6">
-            {/* Avatar */}
-            <div className="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <User className="w-12 h-12 text-primary-600" />
-            </div>
+            {profile?.photo ? (
+              <img
+                src={profile.photo}
+                alt={profile?.name}
+                className="w-24 h-24 rounded-full object-cover border border-gray-200"
+              />
+            ) : (
+              <div className="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <User className="w-12 h-12 text-primary-600" />
+              </div>
+            )}
 
-            {/* User Info */}
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-gray-900">
-                {session?.user?.name}
+                {profile?.name || session?.user?.name}
               </h1>
               <div className="flex flex-wrap items-center gap-3 mt-2">
                 <span className={`badge ${getRoleBadgeColor(session?.user?.role as UserRole)}`}>
@@ -208,7 +285,7 @@ export default function ProfilPage() {
               <div className="mt-4 space-y-2 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-gray-400" />
-                  {session?.user?.email}
+                  {profile?.email || session?.user?.email}
                 </div>
                 {profile?.phone && (
                   <div className="flex items-center gap-2">
@@ -218,21 +295,66 @@ export default function ProfilPage() {
                 )}
               </div>
             </div>
-
-            {/* Edit Button */}
-            <div className="flex-shrink-0">
-              <button
-                className="btn-secondary flex items-center gap-2"
-                onClick={() => alert('Fonctionnalité à venir')}
-              >
-                <Edit className="w-4 h-4" />
-                Modifier
-              </button>
-            </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
+        <div className="card">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Informations du compte</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+            {success && (
+              <div className="bg-green-50 text-green-700 p-3 rounded-lg text-sm">
+                {success}
+              </div>
+            )}
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Prenom</label>
+                <input name="firstName" className="input-field" value={form.firstName} onChange={handleChange} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                <input name="lastName" className="input-field" value={form.lastName} onChange={handleChange} />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input name="email" type="email" className="input-field" value={form.email} onChange={handleChange} required />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Telephone</label>
+              <input name="phone" className="input-field" value={form.phone} onChange={handleChange} />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Photo de profil (URL)</label>
+              <input name="photo" className="input-field" value={form.photo} onChange={handleChange} />
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
+                <input name="newPassword" type="password" className="input-field" value={form.newPassword} onChange={handleChange} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
+                <input name="confirmPassword" type="password" className="input-field" value={form.confirmPassword} onChange={handleChange} />
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button type="submit" className="btn-primary">Enregistrer</button>
+            </div>
+          </form>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="card">
             <div className="flex items-center gap-4">
@@ -240,7 +362,7 @@ export default function ProfilPage() {
                 <Package className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Colis créés</p>
+                <p className="text-sm text-gray-600">Colis crees</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {profile?.colis?.length || 0}
                 </p>
@@ -254,7 +376,7 @@ export default function ProfilPage() {
                 <Plane className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Trajets proposés</p>
+                <p className="text-sm text-gray-600">Trajets proposes</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {profile?.trajets?.length || 0}
                 </p>
@@ -263,7 +385,6 @@ export default function ProfilPage() {
           </div>
         </div>
 
-        {/* Tabs */}
         <div className="card">
           <div className="border-b border-gray-200 mb-6">
             <nav className="flex gap-6">
@@ -296,7 +417,6 @@ export default function ProfilPage() {
             </nav>
           </div>
 
-          {/* Colis Tab */}
           {activeTab === 'colis' && (
             <div className="space-y-4">
               {profile?.colis && profile.colis.length > 0 ? (
@@ -334,7 +454,7 @@ export default function ProfilPage() {
                         href={`/colis`}
                         className="text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center gap-1"
                       >
-                        Voir détails
+                        Voir details
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                     </div>
@@ -343,13 +463,13 @@ export default function ProfilPage() {
               ) : (
                 <div className="text-center py-8">
                   <Package className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">Aucun colis créé</p>
+                  <p className="text-gray-500">Aucun colis cree</p>
                   {userCanCreateColis && (
                     <Link
                       href="/colis/nouveau"
                       className="text-primary-600 hover:text-primary-700 text-sm font-medium mt-2 inline-block"
                     >
-                      Créer un colis
+                      Creer un colis
                     </Link>
                   )}
                 </div>
@@ -357,7 +477,6 @@ export default function ProfilPage() {
             </div>
           )}
 
-          {/* Trajets Tab */}
           {activeTab === 'trajets' && (
             <div className="space-y-4">
               {profile?.trajets && profile.trajets.length > 0 ? (
@@ -386,7 +505,7 @@ export default function ProfilPage() {
                           </span>
                           <span className="flex items-center gap-1">
                             <DollarSign className="w-4 h-4" />
-                            {trajet.prixParKilo}€/kg
+                            {trajet.prixParKilo} EUR/kg
                           </span>
                         </div>
                         {trajet.description && (
@@ -399,7 +518,7 @@ export default function ProfilPage() {
                         href={`/trajets`}
                         className="text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center gap-1"
                       >
-                        Voir détails
+                        Voir details
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                     </div>
@@ -408,7 +527,7 @@ export default function ProfilPage() {
               ) : (
                 <div className="text-center py-8">
                   <Plane className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">Aucun trajet proposé</p>
+                  <p className="text-gray-500">Aucun trajet propose</p>
                   {userCanCreateTrajet && (
                     <Link
                       href="/trajets/nouveau"
@@ -423,25 +542,12 @@ export default function ProfilPage() {
           )}
         </div>
 
-        {/* Security Section */}
         <div className="card">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5 text-gray-400" />
-            Sécurité
+            Securite
           </h2>
           <div className="space-y-4">
-            <div className="flex items-center justify-between py-3 border-b border-gray-100">
-              <div>
-                <p className="font-medium text-gray-900">Mot de passe</p>
-                <p className="text-sm text-gray-600">Modifiez votre mot de passe régulièrement</p>
-              </div>
-              <button
-                className="btn-secondary text-sm"
-                onClick={() => alert('Fonctionnalité à venir')}
-              >
-                Modifier
-              </button>
-            </div>
             <div className="flex items-center justify-between py-3">
               <div>
                 <p className="font-medium text-gray-900">Membre depuis</p>

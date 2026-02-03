@@ -1,74 +1,74 @@
-# 📦 Colis Voyageurs - Dossier de Présentation MVP
+﻿# colis+ - Dossier de Presentation MVP
 
-## 📑 Table des matières
+## ðŸ“‘ Table des matiÃ¨res
 
-1. [Contexte et problématique](#contexte)
-2. [Solution proposée](#solution)
-3. [Fonctionnalités MVP](#fonctionnalités)
+1. [Contexte et problÃ©matique](#contexte)
+2. [Solution proposÃ©e](#solution)
+3. [FonctionnalitÃ©s MVP](#fonctionnalitÃ©s)
 4. [Architecture technique](#architecture)
-5. [Aspects juridiques et sécurité](#juridique)
+5. [Aspects juridiques et sÃ©curitÃ©](#juridique)
 6. [Tests utilisateurs](#tests)
-7. [Roadmap et évolutions](#roadmap)
+7. [Roadmap et Ã©volutions](#roadmap)
 8. [Conclusion](#conclusion)
 
 ---
 
-## 🎯 1. Contexte et problématique {#contexte}
+## ðŸŽ¯ 1. Contexte et problÃ©matique {#contexte}
 
 ### Constat
-- **15 millions** de voyages intercités par an en France
+- **15 millions** de voyages intercitÃ©s par an en France
 - **30% des voyageurs** ont de l'espace libre dans leurs bagages
-- **Coût élevé** des services de livraison traditionnels (25-50€ pour 5kg)
+- **CoÃ»t Ã©levÃ©** des services de livraison traditionnels (25-50â‚¬ pour 5kg)
 - **Absence de solution** pour transport collaboratif de colis
 
-### Problématique
-**Comment mettre en relation efficacement des expéditeurs de colis et des voyageurs 
-disposant d'espace libre, de manière sécurisée et transparente ?**
+### ProblÃ©matique
+**Comment mettre en relation efficacement des expÃ©diteurs de colis et des voyageurs 
+disposant d'espace libre, de maniÃ¨re sÃ©curisÃ©e et transparente ?**
 
 ---
 
-## 💡 2. Solution proposée {#solution}
+## ðŸ’¡ 2. Solution proposÃ©e {#solution}
 
 ### Concept
 Une plateforme web de **mise en relation P2P** (peer-to-peer) entre :
-- **Expéditeurs** : particuliers souhaitant envoyer un colis
-- **Voyageurs** : personnes effectuant un trajet avec capacité de transport
+- **ExpÃ©diteurs** : particuliers souhaitant envoyer un colis
+- **Voyageurs** : personnes effectuant un trajet avec capacitÃ© de transport
 
 ### Proposition de valeur
 
-**Pour les expéditeurs** :
-- ✅ Économie sur les frais de transport (jusqu'à 70%)
-- ✅ Flexibilité sur les dates
-- ✅ Contact direct avec le transporteur
+**Pour les expÃ©diteurs** :
+- âœ… Ã‰conomie sur les frais de transport (jusqu'Ã  70%)
+- âœ… FlexibilitÃ© sur les dates
+- âœ… Contact direct avec le transporteur
 
 **Pour les voyageurs** :
-- ✅ Revenus complémentaires
-- ✅ Optimisation de leur trajet
-- ✅ Rencontres et échanges
+- âœ… Revenus complÃ©mentaires
+- âœ… Optimisation de leur trajet
+- âœ… Rencontres et Ã©changes
 
 **Pour la plateforme** :
-- ✅ Commission future (v2.0) : 10% sur les transactions
-- ✅ Services premium (assurance, vérification)
+- âœ… Commission future (v2.0) : 10% sur les transactions
+- âœ… Services premium (assurance, vÃ©rification)
 
 ---
 
-## ⚙️ 3. Fonctionnalités MVP {#fonctionnalités}
+## âš™ï¸ 3. FonctionnalitÃ©s MVP {#fonctionnalitÃ©s}
 
 ### Vue d'ensemble
 Le MVP se concentre sur la **preuve de concept** : prouver que des utilisateurs 
 peuvent se trouver, discuter et s'accorder.
 
-### Fonctionnalités implémentées
+### FonctionnalitÃ©s implÃ©mentÃ©es
 
 #### 3.1 Authentification
 - Inscription par email + mot de passe
-- Choix du rôle : Expéditeur / Voyageur / Les deux
-- Connexion sécurisée avec NextAuth.js
+- Choix du rÃ´le : ExpÃ©diteur / Voyageur / Les deux
+- Connexion sÃ©curisÃ©e avec NextAuth.js
 - Sessions persistantes
 
 #### 3.2 Gestion des trajets
 - Publication d'un trajet avec :
-  - Ville de départ et d'arrivée
+  - Ville de dÃ©part et d'arrivÃ©e
   - Date du voyage
   - Kilos disponibles
   - Prix par kilo
@@ -78,38 +78,38 @@ peuvent se trouver, discuter et s'accorder.
 
 #### 3.3 Gestion des colis
 - Publication d'un colis avec :
-  - Ville d'envoi et de réception
+  - Ville d'envoi et de rÃ©ception
   - Poids
   - Description obligatoire
-  - Date d'envoi souhaitée
+  - Date d'envoi souhaitÃ©e
 - Matching automatique avec trajets compatibles
-- Vérification des objets interdits
+- VÃ©rification des objets interdits
 
-#### 3.4 Messagerie intégrée
-- Création automatique de conversations (1 colis ↔ 1 trajet)
-- Envoi de messages en temps réel
+#### 3.4 Messagerie intÃ©grÃ©e
+- CrÃ©ation automatique de conversations (1 colis â†” 1 trajet)
+- Envoi de messages en temps rÃ©el
 - Horodatage de tous les messages
-- Historique conservé 90 jours
+- Historique conservÃ© 90 jours
 - Identification claire des interlocuteurs
 
-#### 3.5 Aspects légaux
-- CGU accessibles dès l'inscription
+#### 3.5 Aspects lÃ©gaux
+- CGU accessibles dÃ¨s l'inscription
 - Liste claire des objets interdits (IATA)
-- Clause de non-responsabilité visible
+- Clause de non-responsabilitÃ© visible
 - Acceptation obligatoire des conditions
 
-### Périmètre exclu du MVP (v2.0+)
-- ❌ Paiement intégré
-- ❌ Système de notation
-- ❌ Vérification KYC
-- ❌ Assurance
-- ❌ Géolocalisation
-- ❌ Notifications push
-- ❌ Application mobile
+### PÃ©rimÃ¨tre exclu du MVP (v2.0+)
+- âŒ Paiement intÃ©grÃ©
+- âŒ SystÃ¨me de notation
+- âŒ VÃ©rification KYC
+- âŒ Assurance
+- âŒ GÃ©olocalisation
+- âŒ Notifications push
+- âŒ Application mobile
 
 ---
 
-## 🏗️ 4. Architecture technique {#architecture}
+## ðŸ—ï¸ 4. Architecture technique {#architecture}
 
 ### Stack technologique
 
@@ -117,79 +117,79 @@ peuvent se trouver, discuter et s'accorder.
 - Next.js 14 (App Router) - Framework React full-stack
 - TypeScript - Typage statique
 - Tailwind CSS - Styling responsive
-- Lucide React - Icônes
+- Lucide React - IcÃ´nes
 
 **Backend**
 - Next.js API Routes - API REST
 - NextAuth.js - Authentification
-- Prisma - ORM pour base de données
-- Zod - Validation des données
+- Prisma - ORM pour base de donnÃ©es
+- Zod - Validation des donnÃ©es
 
-**Base de données**
+**Base de donnÃ©es**
 - MySQL 8 - Base relationnelle
-- Relations : Users → Trajets/Colis → Conversations → Messages
+- Relations : Users â†’ Trajets/Colis â†’ Conversations â†’ Messages
 
-**Sécurité**
+**SÃ©curitÃ©**
 - Bcrypt - Hash des mots de passe
 - JWT - Tokens de session
-- CSRF protection - Intégrée Next.js
+- CSRF protection - IntÃ©grÃ©e Next.js
 
-### Schéma de base de données
+### SchÃ©ma de base de donnÃ©es
 
 ```
-┌─────────┐
-│  Users  │──┐
-└─────────┘  │
-             │
-             ├──→ ┌─────────┐
-             │    │ Trajets │──┐
-             │    └─────────┘  │
-             │                 │
-             └──→ ┌─────────┐  │
-                  │  Colis  │──┤
-                  └─────────┘  │
-                               │
-                  ┌────────────┴──────────┐
-                  │    Conversations      │
-                  └───────────────────────┘
-                              │
-                              │
-                  ┌───────────┴───────────┐
-                  │      Messages         │
-                  └───────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  Users  â”‚â”€â”€â”
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
+             â”‚
+             â”œâ”€â”€â†’ â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+             â”‚    â”‚ Trajets â”‚â”€â”€â”
+             â”‚    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
+             â”‚                 â”‚
+             â””â”€â”€â†’ â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
+                  â”‚  Colis  â”‚â”€â”€â”¤
+                  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
+                               â”‚
+                  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+                  â”‚    Conversations      â”‚
+                  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                              â”‚
+                              â”‚
+                  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+                  â”‚      Messages         â”‚
+                  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 ### Flux utilisateur
 
 ```
-Expéditeur                          Plateforme                      Voyageur
-    │                                    │                              │
-    ├─ Inscription ────────────────────→ │                              │
-    │                                    │                              │
-    ├─ Publie colis ───────────────────→ │                              │
-    │                                    │                              │
-    │                                    ├─ Matching auto ─────────────→│
-    │                                    │                              │
-    │                        ┌───────────┴──────────┐                   │
-    │                        │  Trajets compatibles │                   │
-    │                        └──────────────────────┘                   │
-    │                                    │                              │
-    ├─ Clique "Contacter" ──────────────→│                              │
-    │                                    │                              │
-    │                        ┌───────────┴──────────┐                   │
-    │                        │ Conversation créée   │                   │
-    │                        └──────────────────────┘                   │
-    │                                    │                              │
-    ├─ Envoie message ──────────────────→├──────────────────────────────→│
-    │                                    │                              │
-    │←───────────────────────────────────┤────── Répond ────────────────┤
-    │                                    │                              │
-    └─ Accord conclu ───────────────────→│←─────────────────────────────┘
+ExpÃ©diteur                          Plateforme                      Voyageur
+    â”‚                                    â”‚                              â”‚
+    â”œâ”€ Inscription â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’ â”‚                              â”‚
+    â”‚                                    â”‚                              â”‚
+    â”œâ”€ Publie colis â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’ â”‚                              â”‚
+    â”‚                                    â”‚                              â”‚
+    â”‚                                    â”œâ”€ Matching auto â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’â”‚
+    â”‚                                    â”‚                              â”‚
+    â”‚                        â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                   â”‚
+    â”‚                        â”‚  Trajets compatibles â”‚                   â”‚
+    â”‚                        â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                   â”‚
+    â”‚                                    â”‚                              â”‚
+    â”œâ”€ Clique "Contacter" â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’â”‚                              â”‚
+    â”‚                                    â”‚                              â”‚
+    â”‚                        â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                   â”‚
+    â”‚                        â”‚ Conversation crÃ©Ã©e   â”‚                   â”‚
+    â”‚                        â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                   â”‚
+    â”‚                                    â”‚                              â”‚
+    â”œâ”€ Envoie message â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’â”‚
+    â”‚                                    â”‚                              â”‚
+    â”‚â†â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤â”€â”€â”€â”€â”€â”€ RÃ©pond â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+    â”‚                                    â”‚                              â”‚
+    â””â”€ Accord conclu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â†’â”‚â†â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
-### Déploiement
+### DÃ©ploiement
 
-**Options recommandées** :
+**Options recommandÃ©es** :
 1. **Vercel** (frontend + backend) + **PlanetScale** (MySQL)
 2. **Railway** (all-in-one : app + database)
 3. **DigitalOcean** (VPS classique)
@@ -198,205 +198,205 @@ Expéditeur                          Plateforme                      Voyageur
 
 ---
 
-## 🔒 5. Aspects juridiques et sécurité {#juridique}
+## ðŸ”’ 5. Aspects juridiques et sÃ©curitÃ© {#juridique}
 
 ### 5.1 Cadre juridique
 
 #### Statut de la plateforme
 - **Service de mise en relation uniquement**
 - **Pas de transport de colis** (clause essentielle)
-- **Pas de responsabilité contractuelle** entre utilisateurs
+- **Pas de responsabilitÃ© contractuelle** entre utilisateurs
 
-#### Conformité RGPD
-- ✅ Collecte minimale de données (nom, email, téléphone)
-- ✅ Consentement explicite à l'inscription
-- ✅ Droit d'accès, rectification, suppression
-- ✅ Conservation limitée (messages : 90 jours)
-- ✅ Pas de revente de données
+#### ConformitÃ© RGPD
+- âœ… Collecte minimale de donnÃ©es (nom, email, tÃ©lÃ©phone)
+- âœ… Consentement explicite Ã  l'inscription
+- âœ… Droit d'accÃ¨s, rectification, suppression
+- âœ… Conservation limitÃ©e (messages : 90 jours)
+- âœ… Pas de revente de donnÃ©es
 
 ### 5.2 Objets interdits
 
-**Réglementation IATA appliquée** :
+**RÃ©glementation IATA appliquÃ©e** :
 - Armes et munitions
-- Explosifs et matières inflammables
+- Explosifs et matiÃ¨res inflammables
 - Drogues et substances illicites
-- Matières toxiques ou radioactives
+- MatiÃ¨res toxiques ou radioactives
 - Articles contrefaits
 - Animaux vivants (sauf autorisation)
 
-**Contrôles** :
+**ContrÃ´les** :
 - Description obligatoire du colis
 - Signalement par utilisateurs
-- Modération manuelle en cas de doute
-- Suspension immédiate en cas d'infraction
+- ModÃ©ration manuelle en cas de doute
+- Suspension immÃ©diate en cas d'infraction
 
-### 5.3 Sécurité technique
+### 5.3 SÃ©curitÃ© technique
 
 **Authentification** :
 - Hash bcrypt (10 rounds) pour mots de passe
-- Sessions JWT sécurisées
+- Sessions JWT sÃ©curisÃ©es
 - Pas de stockage de mots de passe en clair
 
-**Protection des données** :
+**Protection des donnÃ©es** :
 - HTTPS obligatoire en production
 - Variables d'environnement pour secrets
-- Validation côté serveur (Zod)
+- Validation cÃ´tÃ© serveur (Zod)
 - Protection CSRF native Next.js
 
 **Messagerie** :
-- Messages horodatés (preuve)
+- Messages horodatÃ©s (preuve)
 - Pas de suppression possible
-- Conservés 90 jours max
+- ConservÃ©s 90 jours max
 
-### 5.4 CGU (points clés)
+### 5.4 CGU (points clÃ©s)
 
-1. **Clause de non-responsabilité** :
-   > "La plateforme décline toute responsabilité concernant la perte, 
-   > le vol ou la détérioration des colis"
+1. **Clause de non-responsabilitÃ©** :
+   > "La plateforme dÃ©cline toute responsabilitÃ© concernant la perte, 
+   > le vol ou la dÃ©tÃ©rioration des colis"
 
 2. **Obligations des utilisateurs** :
-   - Décrire fidèlement le colis
+   - DÃ©crire fidÃ¨lement le colis
    - Ne pas transporter d'objets interdits
    - Respecter les accords conclus
 
 3. **Sanctions** :
    - Suspension/suppression de compte
-   - Signalement aux autorités si nécessaire
+   - Signalement aux autoritÃ©s si nÃ©cessaire
 
 ---
 
-## 🧪 6. Tests utilisateurs {#tests}
+## ðŸ§ª 6. Tests utilisateurs {#tests}
 
-### 6.1 Méthodologie
+### 6.1 MÃ©thodologie
 
-**5 testeurs** recrutés :
-- 2 expéditeurs potentiels (étudiants)
-- 2 voyageurs réguliers (professionnels itinérants)
+**5 testeurs** recrutÃ©s :
+- 2 expÃ©diteurs potentiels (Ã©tudiants)
+- 2 voyageurs rÃ©guliers (professionnels itinÃ©rants)
 - 1 utilisateur mixte
 
-**Scénarios testés** :
-1. Inscription complète
+**ScÃ©narios testÃ©s** :
+1. Inscription complÃ¨te
 2. Publication d'un trajet
 3. Publication d'un colis
 4. Recherche et matching
 5. Initiation d'une conversation
-6. Échange de messages
+6. Ã‰change de messages
 
-### 6.2 Métriques collectées
+### 6.2 MÃ©triques collectÃ©es
 
-| Métrique                          | Valeur moyenne | Objectif |
+| MÃ©trique                          | Valeur moyenne | Objectif |
 |-----------------------------------|----------------|----------|
 | Temps d'inscription               | 52s            | <60s     |
 | Temps publication trajet          | 1m18s          | <2min    |
 | Temps publication colis           | 1m05s          | <2min    |
 | Clics pour contacter              | 3              | <5       |
-| Taux de matching réussi           | 73%            | >60%     |
+| Taux de matching rÃ©ussi           | 73%            | >60%     |
 | Messages par conversation         | 4.6            | -        |
 | Satisfaction globale (1-5)        | 4.2/5          | >4/5     |
 
 ### 6.3 Retours utilisateurs
 
 **Points positifs** :
-- ✅ Interface claire et intuitive
-- ✅ Matching automatique apprécié
-- ✅ Messagerie simple et efficace
+- âœ… Interface claire et intuitive
+- âœ… Matching automatique apprÃ©ciÃ©
+- âœ… Messagerie simple et efficace
 
-**Points d'amélioration** :
-- ⚠️ Manque de photos de profil
-- ⚠️ Pas de notification de nouveau message
-- ⚠️ Filtres de recherche limités (pas de dates)
+**Points d'amÃ©lioration** :
+- âš ï¸ Manque de photos de profil
+- âš ï¸ Pas de notification de nouveau message
+- âš ï¸ Filtres de recherche limitÃ©s (pas de dates)
 
-**Bugs identifiés et corrigés** :
-1. ~~Messages non triés chronologiquement~~ → Corrigé
-2. ~~Refresh manuel nécessaire~~ → Auto-refresh ajouté
-3. ~~Validation email faible~~ → Regex améliorée
+**Bugs identifiÃ©s et corrigÃ©s** :
+1. ~~Messages non triÃ©s chronologiquement~~ â†’ CorrigÃ©
+2. ~~Refresh manuel nÃ©cessaire~~ â†’ Auto-refresh ajoutÃ©
+3. ~~Validation email faible~~ â†’ Regex amÃ©liorÃ©e
 
 ---
 
-## 🗺️ 7. Roadmap et évolutions {#roadmap}
+## ðŸ—ºï¸ 7. Roadmap et Ã©volutions {#roadmap}
 
-### Phase 1 : MVP (actuel) ✅
+### Phase 1 : MVP (actuel) âœ…
 - Authentification
 - CRUD trajets/colis
 - Matching basique
 - Messagerie
 - CGU
 
-### Phase 2 : Monétisation (3-6 mois)
-- **Paiement sécurisé** : Intégration Stripe
+### Phase 2 : MonÃ©tisation (3-6 mois)
+- **Paiement sÃ©curisÃ©** : IntÃ©gration Stripe
   - Commission 10% sur transactions
-  - Escrow (fonds bloqués jusqu'à livraison)
-- **Système de notation** : 1-5 étoiles + avis
-- **Profils enrichis** : Photo, biographie, badge vérifié
+  - Escrow (fonds bloquÃ©s jusqu'Ã  livraison)
+- **SystÃ¨me de notation** : 1-5 Ã©toiles + avis
+- **Profils enrichis** : Photo, biographie, badge vÃ©rifiÃ©
 
-### Phase 3 : Sécurité renforcée (6-9 mois)
-- **Vérification d'identité** : Upload pièce d'identité
-- **Assurance colis** : Partenariat assureur (valeur jusqu'à 500€)
+### Phase 3 : SÃ©curitÃ© renforcÃ©e (6-9 mois)
+- **VÃ©rification d'identitÃ©** : Upload piÃ¨ce d'identitÃ©
+- **Assurance colis** : Partenariat assureur (valeur jusqu'Ã  500â‚¬)
 - **Tracking** : GPS du voyageur (optionnel)
 
 ### Phase 4 : Scale (9-12 mois)
 - **Application mobile** : React Native (iOS + Android)
 - **Notifications push** : Nouveaux messages, trajets
-- **API publique** : Intégration avec autres plateformes
+- **API publique** : IntÃ©gration avec autres plateformes
 - **Internationalisation** : Expansion Europe
 
-### Estimations budgétaires
+### Estimations budgÃ©taires
 
-| Phase  | Coût estimé | ROI attendu |
+| Phase  | CoÃ»t estimÃ© | ROI attendu |
 |--------|-------------|-------------|
-| MVP    | 0€          | Validation  |
-| Phase 2| 5 000€      | 2 000€/mois |
-| Phase 3| 15 000€     | 8 000€/mois |
-| Phase 4| 50 000€     | 30 000€/mois|
+| MVP    | 0â‚¬          | Validation  |
+| Phase 2| 5 000â‚¬      | 2 000â‚¬/mois |
+| Phase 3| 15 000â‚¬     | 8 000â‚¬/mois |
+| Phase 4| 50 000â‚¬     | 30 000â‚¬/mois|
 
 ---
 
-## 🎓 8. Conclusion {#conclusion}
+## ðŸŽ“ 8. Conclusion {#conclusion}
 
-### Réalisations
+### RÃ©alisations
 
-Ce MVP démontre la **faisabilité technique** d'une plateforme de mise en relation 
+Ce MVP dÃ©montre la **faisabilitÃ© technique** d'une plateforme de mise en relation 
 P2P pour le transport de colis. Les tests utilisateurs valident :
 
-1. ✅ **L'utilité** : 4.2/5 de satisfaction
-2. ✅ **L'utilisabilité** : Temps de prise en main <2min
-3. ✅ **La sécurité** : Cadre juridique clair + protection données
+1. âœ… **L'utilitÃ©** : 4.2/5 de satisfaction
+2. âœ… **L'utilisabilitÃ©** : Temps de prise en main <2min
+3. âœ… **La sÃ©curitÃ©** : Cadre juridique clair + protection donnÃ©es
 
-### Apprentissages clés
+### Apprentissages clÃ©s
 
 **Techniques** :
-- Maîtrise de Next.js full-stack
-- Architecture de base de données relationnelle
-- Implémentation authentification sécurisée
-- Déploiement et CI/CD
+- MaÃ®trise de Next.js full-stack
+- Architecture de base de donnÃ©es relationnelle
+- ImplÃ©mentation authentification sÃ©curisÃ©e
+- DÃ©ploiement et CI/CD
 
 **Fonctionnels** :
-- Importance de la simplicité (MVP)
+- Importance de la simplicitÃ© (MVP)
 - Focus sur la valeur utilisateur
-- Itérations rapides basées sur feedback
+- ItÃ©rations rapides basÃ©es sur feedback
 
 **Juridiques** :
-- Cadre légal des plateformes P2P
-- Réglementation IATA pour transport
-- RGPD et protection des données
+- Cadre lÃ©gal des plateformes P2P
+- RÃ©glementation IATA pour transport
+- RGPD et protection des donnÃ©es
 
 ### Perspectives
 
-Le marché du transport collaboratif en France est estimé à **500M€** d'ici 2027.
-Cette plateforme peut capter une niche sous-exploitée :
-- **Colis légers** (< 10kg)
-- **Trajets réguliers** (Paris-Lyon, Paris-Bordeaux)
-- **Utilisateurs soucieux du prix** (étudiants, retraités)
+Le marchÃ© du transport collaboratif en France est estimÃ© Ã  **500Mâ‚¬** d'ici 2027.
+Cette plateforme peut capter une niche sous-exploitÃ©e :
+- **Colis lÃ©gers** (< 10kg)
+- **Trajets rÃ©guliers** (Paris-Lyon, Paris-Bordeaux)
+- **Utilisateurs soucieux du prix** (Ã©tudiants, retraitÃ©s)
 
-Avec les phases 2-4 implémentées, le **modèle économique** devient viable :
-- 100 transactions/mois × 20€ × 10% commission = **2 000€/mois**
-- Objectif 12 mois : **1000 transactions/mois = 20 000€/mois**
+Avec les phases 2-4 implÃ©mentÃ©es, le **modÃ¨le Ã©conomique** devient viable :
+- 100 transactions/mois Ã— 20â‚¬ Ã— 10% commission = **2 000â‚¬/mois**
+- Objectif 12 mois : **1000 transactions/mois = 20 000â‚¬/mois**
 
 ---
 
-## 📊 Annexes
+## ðŸ“Š Annexes
 
-### A. Captures d'écran
+### A. Captures d'Ã©cran
 - Page d'accueil
 - Formulaire de publication
 - Interface messagerie
@@ -406,22 +406,24 @@ Avec les phases 2-4 implémentées, le **modèle économique** devient viable :
 - GitHub : `github.com/votre-username/colis-voyageurs`
 - Documentation : `README.md`
 
-### C. Démo live
+### C. DÃ©mo live
 - URL : `https://colis-voyageurs.vercel.app`
 - Comptes de test disponibles
 
 ### D. Bibliographie
 - IATA Dangerous Goods Regulations 2024
-- RGPD - Article 6 (bases légales)
+- RGPD - Article 6 (bases lÃ©gales)
 - UX Design patterns - Nielsen Norman Group
 - Next.js documentation officielle
 
 ---
 
-**Date de présentation** : [À remplir]  
+**Date de prÃ©sentation** : [Ã€ remplir]  
 **Candidat** : [Votre nom]  
 **Formation** : [Nom de la formation]
 
 ---
 
-**Merci de votre attention ! 🚀**
+**Merci de votre attention ! ðŸš€**
+
+

@@ -5,6 +5,8 @@ import { trackClick } from '@/modules/ads/adController'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+export const runtime = 'nodejs'
+
 const clickSchema = z.object({
   adCampaignId: z.string(),
   placement: z.string()

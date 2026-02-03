@@ -6,6 +6,8 @@ import { UserContext } from '@/modules/ads/adTypes'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+export const runtime = 'nodejs'
+
 const contextSchema = z.object({
   pageType: z.string(),
   intent: z.string().optional(),

@@ -7,12 +7,12 @@ import { Navigation } from '@/components/Navigation'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Colis Voyageurs - Plateforme de mise en relation',
-  description: 'Plateforme de mise en relation entre expéditeurs de colis et voyageurs',
+  title: 'colis+ - Plateforme de mise en relation',
+  description: 'Plateforme de mise en relation entre expediteurs de colis et voyageurs'
 }
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {
@@ -26,14 +26,14 @@ export default function RootLayout({
           </main>
           <footer className="bg-gray-800 text-white py-8 mt-20">
             <div className="max-w-7xl mx-auto px-4 text-center">
-              <p className="mb-4">© 2024 Colis Voyageurs - Tous droits réservés</p>
+              <p className="mb-4">(c) 2024 colis+ - Tous droits reserves</p>
               <div className="flex justify-center gap-6 text-sm">
                 <a href="/cgu" className="hover:text-primary-400">CGU</a>
-                <a href="/mentions-legales" className="hover:text-primary-400">Mentions légales</a>
-                <a href="/confidentialite" className="hover:text-primary-400">Confidentialité</a>
+                <a href="/mentions-legales" className="hover:text-primary-400">Mentions legales</a>
+                <a href="/confidentialite" className="hover:text-primary-400">Confidentialite</a>
               </div>
               <p className="mt-4 text-xs text-gray-400">
-                ⚠️ Cette plateforme ne transporte pas les colis. 
+                Cette plateforme ne transporte pas les colis.
                 Elle met en relation des particuliers qui s'accordent librement.
               </p>
             </div>

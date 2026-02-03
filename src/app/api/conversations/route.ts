@@ -10,6 +10,7 @@ import {
   getEffectiveMode,
   hasPermission
 } from '@/types/auth'
+import { getConversationOrCreate, listConversationsForUser } from '@/modules/messaging/messagingService'
 
 const conversationSchema = z.object({
   colisId: z.string(),
@@ -83,61 +84,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Creer ou recuperer la conversation
-    let conversation = await prisma.conversation.findUnique({
-      where: {
-        colisId_trajetId: {
-          colisId,
-          trajetId
-        }
-      },
-      include: {
-        colis: {
-          include: { user: true }
-        },
-        trajet: {
-          include: { user: true }
-        },
-        messages: {
-          orderBy: { createdAt: 'asc' },
-          include: {
-            sender: {
-              select: {
-                id: true,
-                name: true,
-              }
-            }
-          }
-        }
-      }
-    })
-
-    if (!conversation) {
-      conversation = await prisma.conversation.create({
-        data: {
-          colisId,
-          trajetId,
-        },
-        include: {
-          colis: {
-            include: { user: true }
-          },
-          trajet: {
-            include: { user: true }
-          },
-          messages: {
-            include: {
-              sender: {
-                select: {
-                  id: true,
-                  name: true,
-                }
-              }
-            }
-          }
-        }
-      })
-    }
+    const conversation = await getConversationOrCreate(colisId, trajetId)
 
     return NextResponse.json(conversation)
   } catch (error) {
@@ -188,29 +135,7 @@ export async function GET(request: Request) {
       )
     }
 
-    const conversations = await prisma.conversation.findMany({
-      where: {
-        OR: [
-          { colis: { userId: session.user.id } },
-          { trajet: { userId: session.user.id } }
-        ]
-      },
-      include: {
-        colis: {
-          include: { user: true }
-        },
-        trajet: {
-          include: { user: true }
-        },
-        messages: {
-          orderBy: { createdAt: 'desc' },
-          take: 1,
-        }
-      },
-      orderBy: {
-        updatedAt: 'desc'
-      }
-    })
+    const conversations = await listConversationsForUser(session.user.id)
 
     return NextResponse.json(conversations)
   } catch (error) {

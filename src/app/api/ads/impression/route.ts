@@ -5,6 +5,8 @@ import { trackImpression } from '@/modules/ads/adController'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+export const runtime = 'nodejs'
+
 const impressionSchema = z.object({
   adCampaignId: z.string(),
   placement: z.string()

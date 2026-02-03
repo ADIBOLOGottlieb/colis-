@@ -82,15 +82,14 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Identifiants invalides')
         }
 
-        // Validate LES_DEUX users have selected an active mode
+        // LES_DEUX users may sign in without active mode, but must select it before accessing protected pages
         let activeMode: ActiveMode | undefined
         const userRole = user.role as UserRole
         if (userRole === UserRole.LES_DEUX) {
           const selectedMode = credentials.activeMode as ActiveMode | undefined
-          if (!selectedMode || !Object.values(ActiveMode).includes(selectedMode)) {
-            throw new Error('MODE_SELECTION_REQUIRED')
+          if (selectedMode && Object.values(ActiveMode).includes(selectedMode)) {
+            activeMode = selectedMode
           }
-          activeMode = selectedMode
         }
         // EXPEDITEUR and VOYAGEUR don't need active mode selection
 
@@ -119,7 +118,7 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async jwt({ token, user }): Promise<JWT> {
+    async jwt({ token, user, trigger, session }): Promise<JWT> {
       if (user) {
         // User just signed in
         token.id = user.id
@@ -129,6 +128,22 @@ export const authOptions: NextAuthOptions = {
         token.canCreateTrajet = user.canCreateTrajet
         token.canSwitchMode = user.canSwitchMode
         token.effectiveRole = user.effectiveRole
+      }
+      if (trigger === 'update' && session?.activeMode) {
+        token.activeMode = session.activeMode as ActiveMode
+        const userRole = token.role as UserRole
+        const userWithRole: UserWithRole = {
+          id: token.id,
+          email: session?.email || '',
+          name: session?.name || '',
+          role: userRole,
+          activeMode: token.activeMode as ActiveMode
+        }
+        const sessionUser = buildSessionUser(userWithRole)
+        token.canCreateColis = sessionUser.canCreateColis
+        token.canCreateTrajet = sessionUser.canCreateTrajet
+        token.canSwitchMode = sessionUser.canSwitchMode
+        token.effectiveRole = sessionUser.effectiveRole
       }
       return token
     },

@@ -1,3 +1,4 @@
+import 'server-only'
 import { prisma } from '@/lib/prisma'
 import { AdCandidate, AdCreative, AdProvider, AdCategory, UserContext } from './adTypes'
 
@@ -56,6 +57,11 @@ async function getRecentImpressions(userId: string, campaignIds: string[]): Prom
 }
 
 async function getActiveCampaigns(): Promise<AdCandidate[]> {
+  if (!prisma || !(prisma as any).adCampaign) {
+    console.error('[ADS] Prisma client missing AdCampaign model. Run prisma generate/migrate.')
+    return []
+  }
+
   const nowDate = now()
   const campaigns = await prisma.adCampaign.findMany({
     where: {

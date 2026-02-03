@@ -118,7 +118,7 @@ export function requirePermission(
             {
               error: 'Active mode selection required',
               code: 'ACTIVE_MODE_REQUIRED',
-              redirectTo: '/auth/select-mode'
+              redirectTo: '/select-mode'
             },
             { status: 403 }
           );

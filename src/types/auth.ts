@@ -343,6 +343,16 @@ export function getEffectiveRole(user: UserWithRole): ActiveMode {
  * Build a SessionUser from UserWithRole
  */
 export function buildSessionUser(user: UserWithRole): SessionUser {
+  if (user.role === UserRole.LES_DEUX && !user.activeMode) {
+    return {
+      ...user,
+      effectiveRole: ActiveMode.EXPEDITEUR,
+      canCreateColis: false,
+      canCreateTrajet: false,
+      canSwitchMode: true
+    };
+  }
+
   const effectiveRole = getEffectiveMode(user);
   return {
     ...user,

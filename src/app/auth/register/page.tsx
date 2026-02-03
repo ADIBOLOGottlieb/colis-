@@ -13,7 +13,7 @@ export default function RegisterPage() {
     email: '',
     password: '',
     phone: '',
-    role: 'LES_DEUX' as 'EXPEDITEUR' | 'VOYAGEUR' | 'LES_DEUX',
+    role: 'LES_DEUX' as 'EXPEDITEUR' | 'VOYAGEUR' | 'LES_DEUX'
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -27,7 +27,7 @@ export default function RegisterPage() {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData)
       })
 
       const data = await res.json()
@@ -36,11 +36,10 @@ export default function RegisterPage() {
         throw new Error(data.error || 'Erreur lors de l\'inscription')
       }
 
-      // Connexion automatique après inscription
       const signInResult = await signIn('credentials', {
         email: formData.email,
         password: formData.password,
-        redirect: false,
+        redirect: false
       })
 
       if (signInResult?.ok) {
@@ -60,8 +59,8 @@ export default function RegisterPage() {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <Package className="w-12 h-12 text-primary-600 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold">Créer un compte</h2>
-          <p className="text-gray-600 mt-2">Rejoignez la communauté Colis Voyageurs</p>
+          <h2 className="text-3xl font-bold">Creer un compte</h2>
+          <p className="text-gray-600 mt-2">Rejoignez la communaute colis+</p>
         </div>
 
         <form onSubmit={handleSubmit} className="card space-y-4">
@@ -99,7 +98,7 @@ export default function RegisterPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mot de passe * (min. 6 caractères)
+              Mot de passe * (min. 6 caracteres)
             </label>
             <input
               type="password"
@@ -113,7 +112,7 @@ export default function RegisterPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Téléphone (optionnel)
+              Telephone (optionnel)
             </label>
             <input
               type="tel"
@@ -137,7 +136,7 @@ export default function RegisterPage() {
                   onChange={(e) => setFormData({ ...formData, role: e.target.value as any })}
                   className="w-4 h-4 text-primary-600"
                 />
-                <span>Expéditeur uniquement</span>
+                <span>Expediteur uniquement</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -165,10 +164,10 @@ export default function RegisterPage() {
           </div>
 
           <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-lg text-xs text-gray-700">
-            <p className="font-semibold mb-1">En créant un compte, vous acceptez :</p>
+            <p className="font-semibold mb-1">En creant un compte, vous acceptez :</p>
             <ul className="list-disc list-inside space-y-1">
-              <li>Les <Link href="/cgu" className="text-primary-600 hover:underline">conditions générales d'utilisation</Link></li>
-              <li>La <Link href="/confidentialite" className="text-primary-600 hover:underline">politique de confidentialité</Link></li>
+              <li>Les <Link href="/cgu" className="text-primary-600 hover:underline">conditions generales d'utilisation</Link></li>
+              <li>La <Link href="/confidentialite" className="text-primary-600 hover:underline">politique de confidentialite</Link></li>
               <li>L'interdiction de transporter des objets dangereux</li>
             </ul>
           </div>
@@ -182,7 +181,7 @@ export default function RegisterPage() {
           </button>
 
           <p className="text-center text-sm text-gray-600">
-            Déjà inscrit ?{' '}
+            Deja inscrit ?{' '}
             <Link href="/auth/signin" className="text-primary-600 hover:underline font-medium">
               Se connecter
             </Link>

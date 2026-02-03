@@ -4,32 +4,17 @@ import { useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Package, Plane, MessageSquare, User, LogOut, PlusCircle, Menu, X } from 'lucide-react'
-import { UserRole, ActiveMode, canCreateColis, canCreateTrajet } from '@/types/auth'
+import { Package, Menu, X, LogOut } from 'lucide-react'
+import { UserRole } from '@/types/auth'
+import { generateNavbar } from '@/modules/auth/navigation'
 
 export function Navigation() {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // Determine what actions the user can perform
-  const userCanCreateColis = session?.user ? canCreateColis({
-    id: session.user.id,
-    email: session.user.email,
-    name: session.user.name,
-    role: session.user.role,
-    activeMode: session.user.activeMode
-  }) : false
-
-  const userCanCreateTrajet = session?.user ? canCreateTrajet({
-    id: session.user.id,
-    email: session.user.email,
-    name: session.user.name,
-    role: session.user.role,
-    activeMode: session.user.activeMode
-  }) : false
-
   const canSwitchMode = session?.user?.role === UserRole.LES_DEUX
+  const navItems = session ? generateNavbar(session) : []
 
   const isActive = (path: string) => pathname === path || pathname?.startsWith(path + '/')
 
@@ -45,84 +30,27 @@ export function Navigation() {
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary-600 hover:text-primary-700 transition-colors">
             <div className="bg-primary-600 text-white p-1.5 rounded-lg">
               <Package className="w-5 h-5" />
             </div>
-            <span className="hidden sm:block">Colis Voyageurs</span>
+            <span className="hidden sm:block">colis+</span>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-2">
             {session ? (
               <>
-                {/* Browse Links */}
-                <Link href="/trajets" className={navLinkClass('/trajets')}>
-                  <Plane className="w-4 h-4" />
-                  <span>Trajets</span>
-                </Link>
-                <Link href="/colis" className={navLinkClass('/colis')}>
-                  <Package className="w-4 h-4" />
-                  <span>Colis</span>
-                </Link>
-
-                {/* Create Actions */}
-                {userCanCreateTrajet && (
-                  <Link
-                    href="/trajets/nouveau"
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition-all duration-200"
-                  >
-                    <PlusCircle className="w-4 h-4" />
-                    <span className="hidden lg:block">Proposer</span>
+                {navItems.map((item) => (
+                  <Link key={item.href} href={item.href} className={navLinkClass(item.href)}>
+                    <span>{item.label}</span>
                   </Link>
-                )}
+                ))}
 
-                {userCanCreateColis && (
-                  <Link
-                    href="/colis/nouveau"
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all duration-200"
-                  >
-                    <PlusCircle className="w-4 h-4" />
-                    <span className="hidden lg:block">Envoyer</span>
-                  </Link>
-                )}
-
-                {/* Mode Switcher */}
                 {canSwitchMode && (
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full border border-gray-200">
-                    <span className="text-xs text-gray-500">Mode:</span>
-                    <span className={`text-xs font-semibold ${
-                      session.user.activeMode === ActiveMode.EXPEDITEUR
-                        ? 'text-blue-600'
-                        : 'text-green-600'
-                    }`}>
-                      {session.user.activeMode === ActiveMode.EXPEDITEUR ? 'Expéditeur' : 'Voyageur'}
-                    </span>
-                  </div>
+                  <Link href="/select-mode" className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-all duration-200">
+                    <span className="text-xs font-semibold">Changer de mode</span>
+                  </Link>
                 )}
-
-                <Link href="/messages" className={navLinkClass('/messages')}>
-                  <MessageSquare className="w-4 h-4" />
-                </Link>
-
-                {/* User Profile */}
-                <Link
-                  href="/profil"
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200"
-                >
-                  <div className="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4" />
-                  </div>
-                  <div className="hidden lg:flex flex-col items-start">
-                    <span className="text-sm font-medium text-gray-900">{session.user.name}</span>
-                    <span className="text-xs text-gray-500">
-                      {session.user.role === UserRole.EXPEDITEUR && 'Expéditeur'}
-                      {session.user.role === UserRole.VOYAGEUR && 'Voyageur'}
-                      {session.user.role === UserRole.LES_DEUX && 'Les deux'}
-                    </span>
-                  </div>
-                </Link>
 
                 <button
                   onClick={() => signOut()}
@@ -147,7 +75,6 @@ export function Navigation() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
@@ -156,40 +83,21 @@ export function Navigation() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             <div className="flex flex-col gap-2">
               {session ? (
                 <>
-                  <Link href="/trajets" className={navLinkClass('/trajets')} onClick={() => setMobileMenuOpen(false)}>
-                    <Plane className="w-5 h-5" />
-                    <span>Trajets</span>
-                  </Link>
-                  <Link href="/colis" className={navLinkClass('/colis')} onClick={() => setMobileMenuOpen(false)}>
-                    <Package className="w-5 h-5" />
-                    <span>Colis</span>
-                  </Link>
-                  {userCanCreateTrajet && (
-                    <Link href="/trajets/nouveau" className="flex items-center gap-2 px-3 py-2 text-green-700" onClick={() => setMobileMenuOpen(false)}>
-                      <PlusCircle className="w-5 h-5" />
-                      <span>Proposer trajet</span>
+                  {navItems.map((item) => (
+                    <Link key={item.href} href={item.href} className={navLinkClass(item.href)} onClick={() => setMobileMenuOpen(false)}>
+                      <span>{item.label}</span>
+                    </Link>
+                  ))}
+                  {canSwitchMode && (
+                    <Link href="/select-mode" className="flex items-center gap-2 px-3 py-2 text-gray-700" onClick={() => setMobileMenuOpen(false)}>
+                      <span>Changer de mode</span>
                     </Link>
                   )}
-                  {userCanCreateColis && (
-                    <Link href="/colis/nouveau" className="flex items-center gap-2 px-3 py-2 text-blue-700" onClick={() => setMobileMenuOpen(false)}>
-                      <PlusCircle className="w-5 h-5" />
-                      <span>Envoyer colis</span>
-                    </Link>
-                  )}
-                  <Link href="/messages" className={navLinkClass('/messages')} onClick={() => setMobileMenuOpen(false)}>
-                    <MessageSquare className="w-5 h-5" />
-                    <span>Messages</span>
-                  </Link>
-                  <Link href="/profil" className={navLinkClass('/profil')} onClick={() => setMobileMenuOpen(false)}>
-                    <User className="w-5 h-5" />
-                    <span>Profil</span>
-                  </Link>
                   <button
                     onClick={() => signOut()}
                     className="flex items-center gap-2 px-3 py-2 text-red-600"

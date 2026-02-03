@@ -57,16 +57,6 @@ export default function ColisPage() {
     dateEnvoi: '',
   })
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin')
-    }
-  }, [status, router])
-
-  useEffect(() => {
-    fetchColis()
-  }, [fetchColis])
-
   const userCanCreateColis = session?.user ? canCreateColis({
     id: session.user.id,
     email: session.user.email,
@@ -124,6 +114,16 @@ export default function ColisPage() {
       setLoading(false)
     }
   }, [fetchTrajetsCompatiblesBatch])
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/signin')
+    }
+  }, [status, router])
+
+  useEffect(() => {
+    fetchColis()
+  }, [fetchColis])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
