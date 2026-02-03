@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
@@ -26,12 +26,24 @@ interface Trajet {
   }
 }
 
+interface Colis {
+  id: string
+  villeEnvoi: string
+  villeArrivee: string
+  user: {
+    id: string
+  }
+}
+
 export default function TrajetsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [trajets, setTrajets] = useState<Trajet[]>([])
+  const [myColis, setMyColis] = useState<Colis[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [contactTrajetId, setContactTrajetId] = useState<string | null>(null)
+  const [selectedColisId, setSelectedColisId] = useState<string>('')
   const [filters, setFilters] = useState({
     villeDepart: '',
     villeArrivee: '',
@@ -89,11 +101,31 @@ export default function TrajetsPage() {
     fetchTrajets()
   }, [fetchTrajets])
 
+  const fetchMyColis = useCallback(async () => {
+    if (!session?.user) return
+    try {
+      const res = await fetch('/api/colis')
+      if (res.ok) {
+        const data = await res.json()
+        const mine = Array.isArray(data) ? data.filter((c: Colis) => c.user?.id === session.user.id) : []
+        setMyColis(mine)
+      }
+    } catch (error) {
+      console.error('Erreur:', error)
+    }
+  }, [session?.user])
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetchMyColis()
+    }
+  }, [status, fetchMyColis])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!userCanCreateTrajet) {
-      alert('Accès refusé: seuls les voyageurs peuvent créer un trajet.')
+      alert('AccÃ¨s refusÃ©: seuls les voyageurs peuvent crÃ©er un trajet.')
       return
     }
 
@@ -121,16 +153,30 @@ export default function TrajetsPage() {
         fetchTrajets()
       } else {
         const data = await res.json()
-        alert(data.error || 'Erreur lors de la création')
+        alert(data.error || 'Erreur lors de la crÃ©ation')
       }
     } catch (error) {
-      alert('Erreur lors de la création du trajet')
+      alert('Erreur lors de la crÃ©ation du trajet')
     }
   }
+  const handleContact = async (trajetId: string, colisId: string) => {
+    try {
+      const res = await fetch('/api/conversations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ colisId, trajetId })
+      })
 
-  const handleContact = async (trajet: Trajet) => {
-    // Créer une conversation (nécessite un colis)
-    alert('Vous devez d\'abord créer un colis pour contacter ce voyageur. Rendez-vous dans la section "Colis".')
+      if (res.ok) {
+        const conversation = await res.json()
+        router.push(/messages?conversationId=)
+      } else {
+        const data = await res.json()
+        alert(data.error || 'Erreur')
+      }
+    } catch (error) {
+      alert('Erreur lors de la creation de la conversation')
+    }
   }
 
   if (status === 'loading' || loading) {
@@ -164,7 +210,7 @@ export default function TrajetsPage() {
         )}
       </div>
 
-      {/* Formulaire de création */}
+      {/* Formulaire de crÃ©ation */}
       {showForm && userCanCreateTrajet && (
         <div className="card mb-8">
           <h2 className="text-xl font-bold mb-4">Publier un nouveau trajet</h2>
@@ -172,7 +218,7 @@ export default function TrajetsPage() {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Ville de départ *
+                  Ville de dÃ©part *
                 </label>
                 <input
                   type="text"
@@ -185,7 +231,7 @@ export default function TrajetsPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Ville d'arrivée *
+                  Ville d'arrivÃ©e *
                 </label>
                 <input
                   type="text"
@@ -227,7 +273,7 @@ export default function TrajetsPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Prix par kilo (€) *
+                  Prix par kilo (â‚¬) *
                 </label>
                 <input
                   type="number"
@@ -250,7 +296,7 @@ export default function TrajetsPage() {
                 rows={3}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Informations complémentaires..."
+                placeholder="Informations complÃ©mentaires..."
               />
             </div>
 
@@ -280,14 +326,14 @@ export default function TrajetsPage() {
           <input
             type="text"
             className="input-field"
-            placeholder="Ville de départ"
+            placeholder="Ville de dÃ©part"
             value={filters.villeDepart}
             onChange={(e) => setFilters({ ...filters, villeDepart: e.target.value })}
           />
           <input
             type="text"
             className="input-field"
-            placeholder="Ville d'arrivée"
+            placeholder="Ville d'arrivÃ©e"
             value={filters.villeArrivee}
             onChange={(e) => setFilters({ ...filters, villeArrivee: e.target.value })}
           />
@@ -303,7 +349,7 @@ export default function TrajetsPage() {
         {trajets.length === 0 ? (
           <div className="card text-center py-12">
             <Plane className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">Aucun trajet trouvé</p>
+            <p className="text-gray-500">Aucun trajet trouvÃ©</p>
           </div>
         ) : (
           trajets.map((trajet) => (
@@ -313,7 +359,7 @@ export default function TrajetsPage() {
                   <div className="flex items-center gap-3 mb-3">
                     <MapPin className="w-5 h-5 text-primary-600" />
                     <span className="font-bold text-lg">
-                      {trajet.villeDepart} → {trajet.villeArrivee}
+                      {trajet.villeDepart} â†’ {trajet.villeArrivee}
                     </span>
                   </div>
                   
@@ -327,7 +373,7 @@ export default function TrajetsPage() {
                       {trajet.kilosDisponibles} kg disponibles
                     </div>
                     <div className="font-semibold text-primary-600">
-                      {trajet.prixParKilo}€ / kg
+                      {trajet.prixParKilo}â‚¬ / kg
                     </div>
                   </div>
 
@@ -336,7 +382,7 @@ export default function TrajetsPage() {
                   )}
 
                   <div className="text-sm text-gray-500">
-                    Proposé par <span className="font-medium">{trajet.user.name}</span>
+                    ProposÃ© par <span className="font-medium">{trajet.user.name}</span>
                   </div>
                 </div>
 
@@ -348,7 +394,16 @@ export default function TrajetsPage() {
                   ) : (
                     userCanContactVoyageur && (
                       <button
-                        onClick={() => handleContact(trajet)}
+                        onClick={() => {
+                          if (myColis.length === 0) {
+                            alert('Vous devez d\'abord creer un colis pour contacter ce voyageur.')
+                            return
+                          }
+                          setContactTrajetId(trajet.id)
+                          if (!selectedColisId && myColis[0]) {
+                            setSelectedColisId(myColis[0].id)
+                          }
+                        }}
                         className="btn-primary"
                       >
                         Contacter
@@ -357,6 +412,45 @@ export default function TrajetsPage() {
                   )}
                 </div>
               </div>
+
+              {contactTrajetId === trajet.id && userCanContactVoyageur && (
+                <div className="mt-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <p className="text-sm text-gray-700 mb-2">Choisissez le colis a proposer :</p>
+                  <div className="flex flex-col md:flex-row gap-3">
+                    <select
+                      className="input-field"
+                      value={selectedColisId}
+                      onChange={(e) => setSelectedColisId(e.target.value)}
+                    >
+                      {myColis.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.villeEnvoi} -> {c.villeReception}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="flex gap-2">
+                      <button
+                        className="btn-primary"
+                        onClick={() => {
+                          if (!selectedColisId) {
+                            alert('Veuillez selectionner un colis.')
+                            return
+                          }
+                          handleContact(trajet.id, selectedColisId)
+                        }}
+                      >
+                        Contacter
+                      </button>
+                      <button
+                        className="btn-secondary"
+                        onClick={() => setContactTrajetId(null)}
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ))
         )}
@@ -364,3 +458,4 @@ export default function TrajetsPage() {
     </div>
   )
 }
+

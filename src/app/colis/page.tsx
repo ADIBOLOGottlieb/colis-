@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Package, Plus, Search, MapPin, Weight, MessageSquare } from 'lucide-react'
-import { canCreateColis, canContactVoyageur } from '../../types/auth'
+import { canCreateColis, canContactVoyageur, canContactExpediteur } from '../../types/auth'
 import dynamic from 'next/dynamic'
 
 const AdBanner = dynamic(() => import('../../components/AdBanner'), { ssr: false })
@@ -66,6 +66,14 @@ export default function ColisPage() {
   }) : false
 
   const userCanContactVoyageur = session?.user ? canContactVoyageur({
+    id: session.user.id,
+    email: session.user.email,
+    name: session.user.name,
+    role: session.user.role,
+    activeMode: session.user.activeMode
+  }) : false
+
+  const userCanContactExpediteur = session?.user ? canContactExpediteur({
     id: session.user.id,
     email: session.user.email,
     name: session.user.name,
@@ -387,7 +395,16 @@ export default function ColisPage() {
                               className="btn-primary flex items-center gap-2"
                             >
                               <MessageSquare className="w-4 h-4" />
-                              Contacter
+                              Contacter le voyageur
+                            </button>
+                          )}
+                          {userCanContactExpediteur && session?.user.id === match.trajet.user.id && session?.user.id !== c.user.id && (
+                            <button
+                              onClick={() => handleContact(c.id, match.trajet.id)}
+                              className="btn-primary flex items-center gap-2"
+                            >
+                              <MessageSquare className="w-4 h-4" />
+                              Contacter l'expediteur
                             </button>
                           )}
                         </div>
