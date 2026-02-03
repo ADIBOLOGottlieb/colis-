@@ -20,10 +20,10 @@ import {
 } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { UserRole, ActiveMode, canCreateColis, canCreateTrajet } from '@/types/auth'
+import { UserRole, ActiveMode, canCreateColis, canCreateTrajet } from '../../types/auth'
 import dynamic from 'next/dynamic'
 
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false })
+const AdBanner = dynamic(() => import('../../components/AdBanner'), { ssr: false })
 
 interface Colis {
   id: string

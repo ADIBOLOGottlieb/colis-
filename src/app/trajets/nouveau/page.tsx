@@ -5,10 +5,10 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Plane, ArrowLeft, MapPin, Weight, Calendar, FileText, DollarSign, Loader2 } from 'lucide-react'
-import { canCreateTrajet } from '@/types/auth'
+import { canCreateTrajet } from '../../../types/auth'
 import dynamic from 'next/dynamic'
 
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false })
+const AdBanner = dynamic(() => import('../../../components/AdBanner'), { ssr: false })
 
 export default function NouveauTrajetPage() {
   const { data: session, status } = useSession()
