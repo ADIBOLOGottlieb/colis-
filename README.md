@@ -1,0 +1,353 @@
+# 📦 Colis Voyageurs - Plateforme MVP
+
+## 🎯 Description
+
+Plateforme de mise en relation entre **expéditeurs de colis** et **voyageurs** disposant d'espace libre dans leurs bagages. MVP fonctionnel développé en Next.js avec MySQL.
+
+---
+
+## ✨ Fonctionnalités
+
+### MVP v1.0
+- ✅ **Authentification** : Inscription/Connexion par email + mot de passe
+- ✅ **Gestion des trajets** : Publication et recherche de trajets
+- ✅ **Gestion des colis** : Publication et recherche de colis
+- ✅ **Matching intelligent** : Affichage automatique des trajets compatibles
+- ✅ **Messagerie intégrée** : Conversations horodatées entre utilisateurs
+- ✅ **CGU et mentions légales** : Clauses de responsabilité claires
+
+### 🚫 Hors MVP (v2.0+)
+- Paiement intégré (Stripe)
+- Système de notation
+- Vérification d'identité (KYC)
+- Assurance pour colis de valeur
+- Notifications push
+- Application mobile
+
+---
+
+## 🛠️ Stack Technique
+
+- **Framework** : Next.js 14 (App Router)
+- **Langage** : TypeScript
+- **Base de données** : MySQL
+- **ORM** : Prisma
+- **Authentification** : NextAuth.js
+- **Styling** : Tailwind CSS
+- **UI Components** : Lucide React (icônes)
+
+---
+
+## 📋 Prérequis
+
+- Node.js 18+ ([télécharger](https://nodejs.org/))
+- MySQL 8+ ([télécharger](https://dev.mysql.com/downloads/))
+- npm ou yarn
+
+---
+
+## 🚀 Installation
+
+### 1. Cloner le projet
+
+```bash
+cd colis-voyageurs
+npm install
+```
+
+### 2. Configuration de la base de données MySQL
+
+#### Option A : Installation locale
+
+**Installer MySQL** :
+```bash
+# Sur macOS (avec Homebrew)
+brew install mysql
+brew services start mysql
+
+# Sur Ubuntu/Debian
+sudo apt-get install mysql-server
+sudo systemctl start mysql
+
+# Sur Windows : télécharger depuis mysql.com
+```
+
+**Créer la base de données** :
+```bash
+mysql -u root -p
+```
+
+Puis dans le shell MySQL :
+```sql
+CREATE DATABASE colis_voyageurs;
+CREATE USER 'colis_user'@'localhost' IDENTIFIED BY 'votre_mot_de_passe';
+GRANT ALL PRIVILEGES ON colis_voyageurs.* TO 'colis_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+#### Option B : MySQL gratuit en ligne (pour tests)
+
+- **FreeSQLDatabase** : https://www.freesqldatabase.com/
+- **db4free** : https://www.db4free.net/
+- **PlanetScale** (free tier) : https://planetscale.com/
+
+### 3. Configurer les variables d'environnement
+
+Copier le fichier `.env.example` :
+```bash
+cp .env.example .env
+```
+
+Éditer le fichier `.env` :
+```env
+# Base de données MySQL
+DATABASE_URL="mysql://colis_user:votre_mot_de_passe@localhost:3306/colis_voyageurs"
+
+# NextAuth (générer une clé aléatoire)
+NEXTAUTH_SECRET="votre-secret-super-securise-changez-moi"
+NEXTAUTH_URL="http://localhost:3000"
+
+NODE_ENV="development"
+```
+
+**Générer un secret sécurisé** :
+```bash
+openssl rand -base64 32
+```
+
+### 4. Initialiser la base de données avec Prisma
+
+```bash
+# Générer le client Prisma
+npm run prisma:generate
+
+# Créer les tables dans MySQL
+npm run prisma:push
+
+# (Optionnel) Ouvrir Prisma Studio pour voir les données
+npm run prisma:studio
+```
+
+### 5. Lancer l'application
+
+```bash
+npm run dev
+```
+
+L'application sera accessible sur **http://localhost:3000**
+
+---
+
+## 📁 Structure du projet
+
+```
+colis-voyageurs/
+├── prisma/
+│   └── schema.prisma          # Schéma de base de données
+├── src/
+│   ├── app/
+│   │   ├── api/               # Routes API Next.js
+│   │   │   ├── auth/          # Authentification
+│   │   │   ├── trajets/       # CRUD trajets
+│   │   │   ├── colis/         # CRUD colis
+│   │   │   ├── conversations/ # Gestion conversations
+│   │   │   └── messages/      # Envoi de messages
+│   │   ├── auth/              # Pages auth (login/register)
+│   │   ├── trajets/           # Page trajets
+│   │   ├── colis/             # Page colis
+│   │   ├── messages/          # Page messagerie
+│   │   ├── cgu/               # CGU
+│   │   ├── layout.tsx         # Layout principal
+│   │   └── page.tsx           # Page d'accueil
+│   ├── components/            # Composants réutilisables
+│   │   ├── Navigation.tsx
+│   │   └── Providers.tsx
+│   ├── lib/                   # Utilitaires
+│   │   ├── prisma.ts         # Client Prisma
+│   │   └── auth.ts           # Config NextAuth
+│   └── types/                # Types TypeScript
+├── .env.example              # Exemple de variables d'env
+├── package.json
+└── README.md
+```
+
+---
+
+## 🗄️ Schéma de base de données
+
+### Tables principales
+
+1. **users** : Utilisateurs (expéditeurs/voyageurs)
+2. **trajets** : Trajets publiés par les voyageurs
+3. **colis** : Colis publiés par les expéditeurs
+4. **conversations** : Discussions colis ↔ trajet
+5. **messages** : Messages dans les conversations
+
+### Relations
+- Un utilisateur peut avoir plusieurs trajets et colis
+- Une conversation relie 1 colis et 1 trajet
+- Une conversation contient plusieurs messages
+
+---
+
+## 🔐 Sécurité
+
+### Mesures implémentées
+- ✅ Mots de passe hashés avec bcrypt
+- ✅ Sessions JWT avec NextAuth
+- ✅ Validation des données avec Zod
+- ✅ Protection CSRF intégrée à Next.js
+- ✅ Clauses légales dans les CGU
+
+### À améliorer (v2)
+- Limite de taux (rate limiting)
+- Validation des emails
+- 2FA (authentification à deux facteurs)
+
+---
+
+## 📊 Utilisation
+
+### Workflow utilisateur
+
+#### Pour un expéditeur :
+1. Créer un compte (rôle "Expéditeur" ou "Les deux")
+2. Publier un colis avec : ville envoi/réception, poids, description
+3. Consulter les trajets compatibles automatiquement affichés
+4. Contacter un voyageur via la messagerie
+5. Convenir des modalités (prix, lieu de remise)
+
+#### Pour un voyageur :
+1. Créer un compte (rôle "Voyageur" ou "Les deux")
+2. Publier un trajet avec : villes, date, kilos dispo, prix/kg
+3. Recevoir des demandes d'expéditeurs
+4. Échanger via la messagerie
+5. Accepter ou refuser selon le colis
+
+---
+
+## 🧪 Tests utilisateurs
+
+### Plan de test MVP
+
+**Scénario 1 : Inscription**
+- Créer un compte expéditeur
+- Créer un compte voyageur
+- Vérifier la validation des champs
+
+**Scénario 2 : Publier un trajet**
+- Publier un trajet Paris → Lyon
+- Vérifier l'affichage dans la liste
+
+**Scénario 3 : Publier un colis**
+- Publier un colis Paris → Lyon
+- Vérifier le matching avec les trajets
+
+**Scénario 4 : Messagerie**
+- Initier une conversation
+- Envoyer des messages
+- Vérifier l'horodatage
+
+**Critères de succès** :
+- Temps < 2 min pour publier un trajet/colis
+- Matching pertinent (villes correspondantes)
+- Messagerie fluide sans bug
+
+---
+
+## 🚀 Déploiement
+
+### Option 1 : Vercel (recommandé pour Next.js)
+
+1. Créer un compte sur [Vercel](https://vercel.com)
+2. Connecter votre repo GitHub
+3. Configurer les variables d'env dans Vercel
+4. Déployer automatiquement
+
+**Base de données** : Utiliser PlanetScale (free tier compatible Vercel)
+
+### Option 2 : Railway
+
+1. Créer un compte sur [Railway](https://railway.app)
+2. Créer un projet MySQL
+3. Déployer l'app Next.js
+4. Lier la base de données
+
+### Option 3 : Hébergement classique
+
+- Backend : DigitalOcean, AWS EC2, Heroku
+- Base de données : AWS RDS, DigitalOcean Managed Databases
+
+---
+
+## 🗺️ Roadmap
+
+### Version 2.0 (3-6 mois)
+- [ ] Système de notation (1-5 étoiles)
+- [ ] Intégration paiement sécurisé (Stripe)
+- [ ] Vérification d'identité (upload pièce)
+- [ ] Notifications email
+- [ ] Dashboard analytics
+
+### Version 3.0 (6-12 mois)
+- [ ] Application mobile (React Native)
+- [ ] Partenariat assurance
+- [ ] Géolocalisation temps réel
+- [ ] Programme de fidélité
+- [ ] API publique
+
+---
+
+## 🐛 Debug
+
+### Problèmes courants
+
+**Erreur de connexion MySQL** :
+```bash
+# Vérifier que MySQL tourne
+mysql -u root -p
+
+# Vérifier l'URL de connexion dans .env
+```
+
+**Erreur Prisma** :
+```bash
+# Regénérer le client
+npm run prisma:generate
+
+# Réinitialiser la DB
+npx prisma db push --force-reset
+```
+
+**Erreur NextAuth** :
+```bash
+# Vérifier que NEXTAUTH_SECRET est défini dans .env
+# Vérifier que NEXTAUTH_URL correspond à votre domaine
+```
+
+---
+
+## 📝 Licence
+
+Ce projet est un MVP éducatif. Libre d'utilisation pour apprentissage.
+
+---
+
+## 👥 Support
+
+Pour toute question :
+- Email : contact@colis-voyageurs.fr
+- Issues GitHub : [github.com/votre-repo/issues]
+
+---
+
+## ⚠️ Disclaimer légal
+
+Cette plateforme est un service de **mise en relation uniquement**. Nous ne transportons pas les colis et déclinons toute responsabilité concernant les accords conclus entre utilisateurs.
+
+**Objets interdits** : Armes, explosifs, drogues, matières dangereuses selon règlement IATA.
+
+---
+
+**Bon développement ! 🚀**
