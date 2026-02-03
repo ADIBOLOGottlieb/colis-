@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from '../../lib/prisma'
 import { getBestAd } from './adService'
 import { AdCreative, UserContext } from './adTypes'
 

@@ -1,4 +1,4 @@
-import { ActiveMode, UserRole } from '@/types/auth'
+import { ActiveMode, UserRole } from '../../types/auth'
 
 export type NavItem = {
   label: string

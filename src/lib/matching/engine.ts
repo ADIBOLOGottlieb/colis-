@@ -27,7 +27,7 @@ import {
   isSameDay,
   isValid
 } from 'date-fns';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '../prisma';
 import {
   MatchInput,
   MatchResult,
@@ -44,7 +44,7 @@ import {
   DateMatchLevel,
   DEFAULT_MATCHING_CONFIG,
   PRIMARY_MATCH_GUARANTEE
-} from '@/types/matching';
+} from '../../types/matching';
 
 // ============================================================================
 // CORE MATCHING FUNCTION

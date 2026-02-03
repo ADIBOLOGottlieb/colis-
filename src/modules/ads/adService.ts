@@ -1,5 +1,5 @@
 import 'server-only'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '../../lib/prisma'
 import { AdCandidate, AdCreative, AdProvider, AdCategory, UserContext } from './adTypes'
 
 const RECENT_IMPRESSION_WINDOW_MS = 30 * 60 * 1000

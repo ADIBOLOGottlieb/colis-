@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { prisma } from '../../lib/prisma'
 
 export async function getConversationOrCreate(colisId: string, trajetId: string) {
   let conversation = await prisma.conversation.findUnique({
