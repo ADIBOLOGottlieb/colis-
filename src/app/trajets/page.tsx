@@ -169,7 +169,7 @@ export default function TrajetsPage() {
 
       if (res.ok) {
         const conversation = await res.json()
-        router.push(/messages?conversationId=)
+        router.push(`/messages?conversationId=${conversation.id}`)
       } else {
         const data = await res.json()
         alert(data.error || 'Erreur')
