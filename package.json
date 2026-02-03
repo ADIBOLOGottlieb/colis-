@@ -27,12 +27,12 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^20.11.19",
-    "@types/react": "^18.2.56",
+    "@types/node": "^20.19.31",
+    "@types/react": "^18.3.27",
     "@types/react-dom": "^18.2.19",
     "eslint": "^8.57.1",
-    "eslint-config-next": "15.3.1",
+    "eslint-config-next": "^15.3.1",
     "prisma": "^5.11.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.9.3"
   }
 }
