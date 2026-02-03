@@ -7,7 +7,7 @@ import {
   UserRole,
   ActiveMode,
   Permission
-} from '@/types/auth'
+} from '../../../types/auth'
 import { requirePermission } from '../../../lib/auth/guards'
 
 const trajetSchema = z.object({

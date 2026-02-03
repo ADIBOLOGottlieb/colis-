@@ -9,7 +9,7 @@ import {
   ActiveModeRequiredError,
   getEffectiveMode,
   hasPermission
-} from '@/types/auth'
+} from '../../../types/auth'
 import { getConversationOrCreate, listConversationsForUser } from '../../../modules/messaging/messagingService'
 
 const conversationSchema = z.object({

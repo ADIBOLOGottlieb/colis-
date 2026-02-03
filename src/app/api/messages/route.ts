@@ -9,7 +9,7 @@ import {
   ActiveModeRequiredError,
   getEffectiveMode,
   hasPermission
-} from '@/types/auth'
+} from '../../../types/auth'
 import { createMessage } from '../../../modules/messaging/messagingService'
 
 const messageSchema = z.object({

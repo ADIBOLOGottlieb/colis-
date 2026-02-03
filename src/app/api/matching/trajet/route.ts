@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { requirePermission } from '../../../../lib/auth/guards'
-import { Permission } from '@/types/auth'
+import { Permission } from '../../../../types/auth'
 import { findMatchesForTrajet } from '../../../../modules/matching/matchingService'
 import { prisma } from '../../../../lib/prisma'
 
