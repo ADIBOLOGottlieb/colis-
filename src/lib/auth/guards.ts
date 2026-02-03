@@ -7,7 +7,7 @@
 
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { authOptions } from '../auth';
 import {
   Permission,
   ActiveMode,
@@ -17,8 +17,8 @@ import {
   ActiveModeRequiredError,
   getEffectiveMode,
   hasPermission
-} from '@/types/auth';
-import { prisma } from '@/lib/prisma';
+} from '../../types/auth';
+import { prisma } from '../prisma';
 
 // ============================================================================
 // TYPE DEFINITIONS

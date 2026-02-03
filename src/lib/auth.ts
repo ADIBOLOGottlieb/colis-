@@ -2,8 +2,8 @@ import { NextAuthOptions, User, Session } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
-import { prisma } from '@/lib/prisma'
-import { UserRole, ActiveMode, buildSessionUser, UserWithRole } from '@/types/auth'
+import { prisma } from './prisma'
+import { UserRole, ActiveMode, buildSessionUser, UserWithRole } from '../types/auth'
 
 // Extend NextAuth types
 declare module 'next-auth' {

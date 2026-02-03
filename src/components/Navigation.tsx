@@ -5,8 +5,8 @@ import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Package, Menu, X, LogOut } from 'lucide-react'
-import { UserRole } from '@/types/auth'
-import { generateNavbar } from '@/modules/auth/navigation'
+import { UserRole } from '../types/auth'
+import { generateNavbar } from '../modules/auth/navigation'
 
 export function Navigation() {
   const { data: session } = useSession()
