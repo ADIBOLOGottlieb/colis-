@@ -424,7 +424,7 @@ export default function TrajetsPage() {
                     >
                       {myColis.map((c) => (
                         <option key={c.id} value={c.id}>
-                          {c.villeEnvoi} -> {c.villeReception}
+                          {`${c.villeEnvoi} -> ${c.villeReception}`}
                         </option>
                       ))}
                     </select>
