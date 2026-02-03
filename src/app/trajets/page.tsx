@@ -29,7 +29,7 @@ interface Trajet {
 interface Colis {
   id: string
   villeEnvoi: string
-  villeArrivee: string
+  villeReception: string
   user: {
     id: string
   }
