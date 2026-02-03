@@ -5,10 +5,10 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Package, ArrowLeft, MapPin, Weight, Calendar, FileText, Loader2 } from 'lucide-react'
-import { canCreateColis } from '@/types/auth'
+import { canCreateColis } from '../../../types/auth'
 import dynamic from 'next/dynamic'
 
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false })
+const AdBanner = dynamic(() => import('../../../components/AdBanner'), { ssr: false })
 
 export default function NouveauColisPage() {
   const { data: session, status } = useSession()

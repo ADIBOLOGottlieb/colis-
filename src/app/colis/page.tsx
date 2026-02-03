@@ -4,10 +4,10 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Package, Plus, Search, MapPin, Weight, MessageSquare } from 'lucide-react'
-import { canCreateColis, canContactVoyageur } from '@/types/auth'
+import { canCreateColis, canContactVoyageur } from '../../types/auth'
 import dynamic from 'next/dynamic'
 
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false })
+const AdBanner = dynamic(() => import('../../components/AdBanner'), { ssr: false })
 
 interface Colis {
   id: string
